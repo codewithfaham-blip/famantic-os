@@ -102,3 +102,65 @@ void terminal_backspace(void) {
         terminal_buffer[index] = vga_entry(' ', terminal_color);
     }
 }
+#include <stdarg.h>
+
+void printf(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    for (const char* p = format; *p != '\0'; p++) {
+        if (*p == '%') {
+            p++;
+            switch (*p) {
+                case 's': {
+                    char* s = va_arg(args, char*);
+                    terminal_writestring(s);
+                    break;
+                }
+                case 'i':
+                case 'd': {
+                    int d = va_arg(args, int);
+                    char buf[32];
+                    itoa(d, buf, 10);
+                    terminal_writestring(buf);
+                    break;
+                }
+                case 'x': {
+                    unsigned int x = va_arg(args, unsigned int);
+                    char buf[32];
+                    // itoa in string.c handles signed ints, we might need an unsigned itoa
+                    // but for hex it usually works fine if we treat it as int
+                    itoa(x, buf, 16);
+                    terminal_writestring("0x");
+                    terminal_writestring(buf);
+                    break;
+                }
+                case 'p': {
+                    void* p_ptr = va_arg(args, void*);
+                    char buf[32];
+                    itoa((uint32_t)p_ptr, buf, 16);
+                    terminal_writestring("0x");
+                    terminal_writestring(buf);
+                    break;
+                }
+                case 'c': {
+                    char c = (char)va_arg(args, int);
+                    terminal_putchar(c);
+                    break;
+                }
+                case '%': {
+                    terminal_putchar('%');
+                    break;
+                }
+                default:
+                    terminal_putchar('%');
+                    terminal_putchar(*p);
+                    break;
+            }
+        } else {
+            terminal_putchar(*p);
+        }
+    }
+
+    va_end(args);
+}
