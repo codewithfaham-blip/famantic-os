@@ -11,7 +11,7 @@ ASFLAGS = -f elf32
 LDFLAGS = -m elf_i386 -T linker.ld -nostdlib
 
 # Source files
-ASM_SOURCES = boot.asm
+ASM_SOURCES = boot.asm`
 C_SOURCES = kernel.c vga.c string.c io.c gdt.c idt.c isr.c irq.c keyboard.c shell.c
 
 # Object files
