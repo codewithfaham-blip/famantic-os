@@ -31,6 +31,10 @@ _start:
     ; Set up stack
     mov esp, stack_top
     
+    ; Push multiboot info
+    push ebx
+    push eax
+    
     ; Call C kernel
     call kernel_main
     

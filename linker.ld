@@ -8,6 +8,7 @@ SECTIONS
     /* Kernel starts at 1MB in physical memory */
     /* This is the standard location for x86 kernels */
     . = 1M;
+    _kernel_start = .;
 
     /* Multiboot header must be at the very beginning */
     .text ALIGN(4K) : AT(ADDR(.text))
@@ -37,6 +38,7 @@ SECTIONS
         *(.bss)
         *(.bss.*)
     }
+    _kernel_end = .;
 
     /* Discard unnecessary sections */
     /DISCARD/ :
