@@ -7,8 +7,9 @@
 iso_root/
 
 # OS images
-*.iso
 *.img
+# Allow Famantic-os.iso to be tracked
+!Famantic-os.iso
 
 # Editor files
 *.swp
